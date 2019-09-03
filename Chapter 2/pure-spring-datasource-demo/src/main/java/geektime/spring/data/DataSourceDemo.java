@@ -1,21 +1,17 @@
 package geektime.spring.data;
 
 
-import javafx.application.Application;
 import org.apache.commons.dbcp2.BasicDataSourceFactory;
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.support.ClassPathXmlApplicationContext;
-import org.springframework.core.env.SystemEnvironmentPropertySource;
 import org.springframework.jdbc.datasource.DataSourceTransactionManager;
 import org.springframework.transaction.PlatformTransactionManager;
 import org.springframework.transaction.annotation.EnableTransactionManagement;
 
 import javax.annotation.Resource;
 import javax.sql.DataSource;
-import javax.xml.transform.Source;
-import java.awt.image.DataBuffer;
 import java.sql.Connection;
 import java.sql.SQLException;
 import java.util.Arrays;
