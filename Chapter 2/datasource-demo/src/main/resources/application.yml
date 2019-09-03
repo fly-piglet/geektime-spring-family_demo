@@ -1,0 +1,28 @@
+spring:
+  # 数据源配置
+  datasource:
+    hikari:
+      jdbc-url: 'jdbc:h2:mem:testdb'
+      username: 'sa'
+      password:
+      # 链接池链接数量
+      maximum-pool-size: 5
+      # 最小空闲数量
+      minimum-idle: 5
+      # 空闲超时时间
+      idle-timeout: 600000
+      # 链接超时时间
+      connection-timeout: 30000
+      # 最长生命周期时间
+      max-lifetime: 1800000
+  # 输出管理功能
+  output:
+    ansi:
+      enabled: always
+# 基本管理功能
+management:
+  endpoints:
+    web:
+      exposure:
+        include: '*'
+
