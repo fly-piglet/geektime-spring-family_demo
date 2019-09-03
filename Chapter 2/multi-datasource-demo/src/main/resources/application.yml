@@ -1,0 +1,23 @@
+# 开启监看检查端点
+management:
+  endpoints:
+    web:
+      exposure:
+        include: "*"
+# 开启ansi输出
+spring:
+  output:
+    ansi:
+      enabled: always
+# 数据源1
+foo:
+  datasource:
+    url: 'jdbc:h2:mem:foo'
+    username: 'sa'
+    password:
+# 数据源2
+bar:
+  datasource:
+    url: 'jdbc:h2:mem:bar'
+    username: 'sa'
+    password:
