@@ -1,0 +1,40 @@
+# 开启监控端点，方便查看容器运行情况
+management:
+  endpoints:
+    web:
+      exposure:
+        include: '*'
+# 默认就是检查终端是否支持彩色输出，所以以后可以不用输出
+spring:
+  output:
+    ansi:
+      enabled: detect
+  datasource:
+    druid:
+      url: 'jdbc:h2:mem:foo'
+      username: 'sa'
+      # 链接属性，使用加密，指定对应的key
+      connect-properties: config.decrypt=true;config.decrypt.key=${public-key}
+      # 使用加密过后的秘钥
+      password: n/z7PyA5cvcXvs8px8FVmBVpaRyNsvJb3X7YfS38DJrIg25EbZaZGvH4aHcnc97Om0islpCAPc3MqsGvsrxVJw==
+      # 初始化数量
+      initial-size: 5
+      # 最大激活数量
+      max-active: 5
+      # 最小空闲数量
+      min-idle: 5
+      # 当借用出线程池的时候，校验
+      test-on-borrow: true
+      # 当返回线程池的时候校验
+      test-on-return: true
+      # 当空闲的时候校验
+      test-while-idle: true
+      # 开启过滤器配置
+      filter:
+        config:
+          enabled: true
+      filters: conn,config,stat,slf4j
+# 配置指定的秘钥
+public-key: MFwwDQYJKoZIhvcNAQEBBQADSwAwSAJBALS8ng1XvgHrdOgm4pxrnUdt3sXtu/E8My9KzX8sXlz+mXRZQCop7NVQLne25pXHtZoDYuMh3bzoGj6v5HvvAQ8CAwEAAQ==
+
+
