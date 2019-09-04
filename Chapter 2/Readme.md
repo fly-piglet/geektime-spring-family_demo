@@ -84,3 +84,62 @@ showme the code：simple-jdbc-demo
    1. 查询一个数据
    2. 查询单值列表数据
    3. 查询多映射列表数据maprow
+
+## 了解spring的抽象：事务抽象
+
+1. 一致的事务模型
+   1. jdbc/hibernate/mybatis
+   2. datasource/jta
+2. 事务抽象的核心接口
+   1. PlatformTransactionManager
+      1. DatasourceTransactionmanager: jdbc\mybatis
+      2. HibernateTransactionmanager:hibernate
+      3. JtaTransactionManager:jta
+   2. TransactionDefinition
+      1. propagation:传播特性（7种）
+         1. 有就用当前没有就用新的（默认）
+         2. 事务可有可无不是必须的
+         3. 当前一定要有事务，不然抛出异常
+         4. 无论是否有事务，都开启新事务
+         5. 不支持事务，按照没有事务运行
+         6. 不支持事务，如果有则抛出异常
+         7. 当前有事务，就再启动一个事务
+      2. isolation：隔离级别，解决问题：脏读、不可重复读、幻读
+         1. 读未提交
+         2. 读已提交
+         3. 可重复读
+         4. 串行化
+      3. timeout：超时
+      4. readonlystatus：只读模式
+3. 编程式事务
+   1. TransactionTemplate
+      1. TranscationCallback
+      2. TransactionCallbackWithoutResult
+   2. PlatformTransactionManager
+      1. 可以传入TranscationDefinition进行定义
+4. 生命式事务：通过aop来实现的
+   1. 开启事务注解的方式
+      1. @EnableTranscationManagement
+      2. xml配置：tx:annotation-driven
+   2. 一些配置
+      1. proxyTargetClass: 使用cglib的模式，无论是否是接口都能代理实现事务
+      2. mode：
+      3. order:
+   3. 注解Transactional
+      1. transactionManager
+      2. propagation
+      3. isolation
+      4. timeout
+      5. readonly
+      6. 如何判断回滚：异常
+
+## spirng jdbc的异常抽象
+
+1. spring会将数据操作的异常转换为DataAccessException
+2. 无论使用何种数据访问方式，都能使用一样的异常
+3. spring是怎么认识那些错误码的
+   1. 通过sqlerrorcodesqlexceptionTranslator解析错误码
+   2. ErrorCode定义
+      1. org/springframework/jdbc/support/sql-error-codes.xml
+      2. Classpath下的sql-error-codes.xml
+   3. 能通过配置文件实现对于错误嘛的定制化处理，并且能够定制化自己的异常，实现自定义数据库异常
