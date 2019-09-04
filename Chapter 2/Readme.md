@@ -1,3 +1,5 @@
+# 第二章节联系
+
 ## datasource-demo
 
 单数据源
@@ -7,6 +9,15 @@
 密码为空
 
 加入了starter
+
 1. jdbc，会自动按照配置生成数据源，我们使用DataSource和JdbcTemplate就能够使用了
 2. 使用lombok注解@Slf4j就能够快速打印日志了
 3. 使用jdbctemplate就能够进行部分高级查询，然后直接进行日志输出
+
+## multi-datasource-demo
+
+所数据源demo
+
+## druid-demo
+
+druid数据源
