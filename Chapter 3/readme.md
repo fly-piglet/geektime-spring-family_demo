@@ -87,6 +87,9 @@ jadira.usertype
 lombok
 datajpa
 
+订单、咖啡、咖啡用户等的关系
+使用toString添加callsuper为true
+
 ## 通过JPA操作数据
 
 * enableJpaRespositories
@@ -97,13 +100,72 @@ datajpa
 
 定义查询，根据方法名定义
 
-1. findby/readby/queryby/getby
-2. countby
-3. orderby asc desc
-4. and or ignoreCase
-5. top first distinct
+1. findby/readby/queryby/getby： 查询
+2. countby：计数
+3. orderby asc desc： 排序
+4. and or ignoreCase： 并且，忽略大小写
+5. top first distinct： 去重，前几个，开始几个定义
 
 分页查询
-PagingAndSortingRepository
-Pageable/Sort
+PagingAndSortingRepository，子接口
+Pageable/Sort，分页和排序
 Slice/Page
+
+## Repository是怎么从接口变成bean的呢
+
+* JPaRepositoriesRegister
+  * 激活了@EnableJpaRepositories
+  * 返回了JpaRepositoryConfigExtension
+* RepositoryBeanDefinitionRegistrarSupport.registerBeanDefinitions
+  * 注册RepositoryBean,类型是JpaRepositoryFactoryBean
+* RepositoryBeanDefinitionRegistrarSupport.getRepositoryConfigurations
+  * 取得Repository配置
+* JpaRepositoryFacotry.getTargetRepository
+  * 创建了Repository
+
+总结其实就是通过spring烧苗对应的注解，获取元数据配置
+注册，获取配置，获取具体配置，通过工厂的方式来创建实现类
+
+## 接口的方法是如何被解释的
+
+* RepositoryFacotrySupport.getRepository添加Advice
+  * DefaultMethodInvokingMethodIntercetor
+  * QueryExecutorMethodInterceptor
+* AbstractJpaQuery.execute执行具体的查询
+* 语法解析在Part中，在springboot的jpa的common中，语法解析树
+
+在创建实现类的时候，添加过滤器拦截器，对针对的方法进行过滤和拦截，并且在通用方式中调用实现的接口
+
+## 通过mybatis操作数据库
+
+* Mybatis
+  * 一款优秀的持久层框架
+  * 支持定制化sql，存储过程，以及高级映射
+* 在Spring中使用Mybatis
+  * mybatis的psirng适配器
+  * mybatis的springboot的starter
+* 与hibernate如何选择
+  * 如果整个操作简单的话，可以使用jpa
+  * 如果dba对sql有比较高的要求，要加优化，或者本身比较复杂的时候，使用mybatis是比较合适的
+  * 在bat的大厂里面有dba，所以跟多倾向于使用mybatis
+
+简单配置：
+
+1. mapper-locations=配置xml的map路径，一般是基于classpath下面的mapper文件夹，下面的所有xml都加载
+2. 定义类型别名的包名:
+3. 定义typeHandler扫描的包名
+4. 定义配置的map其他相关的东西：将下划线转换为驼峰规则
+
+定义与扫描：
+
+1. @MapperScan配置扫描位置：扫描代码中对应的mapper的路径
+2. @Mapper定义接口：定义接口，通过注解的形式配置xml实现以及映射结果
+3. 映射的定义--xml与注解：使用xml描述对应的映射，同时混用
+
+## 案例实现
+
+1. 添加一个springdemo，添加mybatis的依赖，添加金钱库的依赖
+2. 创建数据库实体
+3. 创建表结构，使用h2数据库在启动后自动创建
+4. 创建money的handler转换器，提供money的转换
+5. 添加呀一个mapper，使用注解方式实现保存和查询功能

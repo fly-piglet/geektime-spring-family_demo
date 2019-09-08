@@ -39,27 +39,34 @@ public class JpaComplexDemoApplication implements ApplicationRunner {
 	}
 
 	@Override
-	@Transactional
+	@Transactional(rollbackFor = Exception.class)
+	/**
+	 * 有些时候，是需要添加事务的，不然事务会有问题
+ 	 */
 	public void run(ApplicationArguments args) throws Exception {
 		initOrders();
 		findOrders();
 	}
 
 	private void initOrders() {
+		// 创建咖啡的实例
 		Coffee latte = Coffee.builder().name("latte")
 				.price(Money.of(CurrencyUnit.of("CNY"), 30.0))
 				.build();
 		coffeeRepository.save(latte);
 		log.info("Coffee: {}", latte);
 
+		// 还有一个espresso
 		Coffee espresso = Coffee.builder().name("espresso")
 				.price(Money.of(CurrencyUnit.of("CNY"), 20.0))
 				.build();
 		coffeeRepository.save(espresso);
 		log.info("Coffee: {}", espresso);
 
+		// 创建了两张订单
 		CoffeeOrder order = CoffeeOrder.builder()
 				.customer("Li Lei")
+				// 只有espresso
 				.items(Collections.singletonList(espresso))
 				.state(OrderState.INIT)
 				.build();
@@ -68,10 +75,12 @@ public class JpaComplexDemoApplication implements ApplicationRunner {
 
 		order = CoffeeOrder.builder()
 				.customer("Li Lei")
+				// 有两个数据
 				.items(Arrays.asList(espresso, latte))
 				.state(OrderState.INIT)
 				.build();
 		orderRepository.save(order);
+		// 插入了order表，以及order关系表
 		log.info("Order: {}", order);
 	}
 
