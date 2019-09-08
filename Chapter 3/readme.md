@@ -165,7 +165,52 @@ Slice/Page
 ## 案例实现
 
 1. 添加一个springdemo，添加mybatis的依赖，添加金钱库的依赖
-2. 创建数据库实体
+2. 创建数据库实体coffee
 3. 创建表结构，使用h2数据库在启动后自动创建
 4. 创建money的handler转换器，提供money的转换
 5. 添加呀一个mapper，使用注解方式实现保存和查询功能
+
+## 使用mybatis代码生成器
+
+Mybatisgenerator生成工具
+
+* Mybatis代码生成器
+* 根据数据库表生成相关代码
+  * POJO
+  * Mapper接口
+  * SQLMapXml
+* 运行MybatisGenerator
+  * java -jar mybatis-generator-core-x.x.x.jar -configfile generatorcConfig.xml
+  * 使用maven插件
+    * mvn mybatis-generator:generate
+    * ${basedir}/src/main/resources/generatorConfig.xml
+  * Eclipse plugin
+  * Java程序
+  * Ant Task
+* 配置Mybatis Generator
+  * generatorConfiguration
+  * context
+    * jdbcConnection
+    * javamodelGenerator
+    * sqlMapGenerator
+    * javaClientGenerator(注解，xml，都可以)
+    * table
+* 生成时候可以使用的插件
+  * FluentBuilderMethodsPlugin
+  * ToStringPlugin
+  * SerializablePlugin
+  * RowBoundsPlugin
+  * ...
+* 使用生成对象
+  * 简单操作，直接使用生成的xxxMapper的方法
+  * 复杂查询，使用生成的xxxExample对象
+  * 又要组件又要自己的，所以自己分开放置，保证下次能够重新生成
+
+## 例子
+
+* 添加core依赖
+* 第一步是生成，第二部是演示
+* 添加表结构
+* 添加配置，编写生成代码
+* 编写实现代码
+* 最佳实践，生成的代码和自己维护的代码分开编写，比如自己一套domain、mapper、xml这样可以直接替换。
